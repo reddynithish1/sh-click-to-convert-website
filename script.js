@@ -190,6 +190,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+  // Helper to escape HTML tags to prevent script injection/XSS
+  function sanitizeInput(str) {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;')
+      .replace(/\//g, '&#x2F;');
+  }
+
   // ============================================================
   // === 6. CONTACT FORM HANDLING
   // ============================================================
@@ -230,9 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.style.cursor = 'not-allowed';
       }
 
-      // Simulate send delay, then show success
-      setTimeout(() => {
-        // Restore button
+      // Success helper
+      function showSuccessState() {
         if (submitBtn) {
           submitBtn.textContent = originalBtnText;
           submitBtn.disabled = false;
@@ -254,8 +265,49 @@ document.addEventListener('DOMContentLoaded', () => {
             formSuccess.classList.remove('show');
           }
         }, 5000);
+      }
 
-      }, 1500);
+      // Honeypot spam check
+      const botField = contactForm.querySelector('[name="bot-field"]');
+      if (botField && botField.value.trim() !== '') {
+        // Silently consume bot submissions and simulate success
+        setTimeout(showSuccessState, 1000);
+        return;
+      }
+
+      // Prepare URL-encoded parameters for Netlify Form Submission
+      const bodyParams = new URLSearchParams();
+      bodyParams.append('form-name', 'contact');
+      bodyParams.append('name', sanitizeInput(nameVal));
+      bodyParams.append('email', sanitizeInput(emailVal));
+      bodyParams.append('message', sanitizeInput(messageVal));
+      if (botField) {
+        bodyParams.append('bot-field', botField.value);
+      }
+
+      // Submit Form via Fetch AJAX
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: bodyParams.toString()
+      })
+      .then(response => {
+        if (response.ok) {
+          showSuccessState();
+        } else {
+          throw new Error('Form submission failed');
+        }
+      })
+      .catch(() => {
+        alert('There was a problem sending your message. Please check your internet connection and try again.');
+        // Restore button state on error
+        if (submitBtn) {
+          submitBtn.textContent = originalBtnText;
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+          submitBtn.style.cursor = 'pointer';
+        }
+      });
     });
   }
 
