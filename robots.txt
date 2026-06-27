@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sh-click-to-convert.netlify.app/sitemap.xml
