@@ -542,70 +542,86 @@ section {
 
 /* Founder card */
 .founder-card {
-  background: var(--white);
-  border-radius: 16px;
-  padding: 2.5rem;
+  background: linear-gradient(160deg, #0B1D33 0%, #112540 60%, #0d1f37 100%);
+  border-radius: 20px;
+  padding: 0;
+  padding-bottom: 2rem;
   text-align: center;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 20px 60px rgba(11, 29, 51, 0.4), 0 0 0 1px rgba(212, 160, 23, 0.2);
   position: sticky;
   top: 100px;
+  overflow: hidden;
 }
 
 .founder-image-wrapper {
-  margin-bottom: 1.5rem;
+  position: relative;
+  margin-bottom: 0;
+  /* radial gold glow behind the cutout figure */
+  background: radial-gradient(ellipse 80% 70% at 50% 85%, rgba(212, 160, 23, 0.18) 0%, rgba(212, 160, 23, 0.04) 60%, transparent 100%);
+  padding-top: 1.5rem;
+  min-height: 280px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
-.founder-avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--primary-lighter));
-  border: 4px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  font-family: var(--font-heading);
-  font-size: 3rem;
-  color: var(--accent);
-  font-weight: 700;
+.founder-photo {
+  display: block;
+  max-width: 82%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
+  object-position: bottom center;
+  /* slight drop shadow so cutout edges read cleanly */
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+  position: relative;
+  z-index: 1;
 }
 
 .founder-card h3 {
   font-family: var(--font-heading);
   font-size: 1.5rem;
-  color: var(--primary);
-  margin-top: 1rem;
+  color: var(--white);
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+  padding: 0 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .founder-role {
   color: var(--accent);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  padding: 0 1.5rem;
 }
 
 .founder-social {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
 }
 
 .founder-social a {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(11, 29, 51, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 160, 23, 0.25);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
-  margin: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0.3rem;
   transition: var(--transition);
 }
 
 .founder-social a:hover {
   background: var(--accent);
-  color: var(--white);
+  border-color: var(--accent);
+  color: var(--primary);
+  transform: translateY(-2px);
 }
 
 /* About content */
@@ -1714,8 +1730,12 @@ section {
 
   .founder-card {
     position: static;
-    max-width: 400px;
+    max-width: 380px;
     margin: 0 auto;
+  }
+
+  .founder-photo {
+    max-height: 260px;
   }
 
   .footer-grid {
